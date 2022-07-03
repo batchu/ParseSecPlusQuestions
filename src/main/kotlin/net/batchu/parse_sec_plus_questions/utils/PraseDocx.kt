@@ -72,7 +72,8 @@ class ParseDocx: CommandLineRunner{
                         .map { Choice(choice = it.third!!, isCorrect = it.second.last() == correctAnswer) },
                     explanation = list
                         .filter { it.second == "Comment" }
-                        .joinToString("\n") { it.third!! }
+                        .joinToString("\n") { it.third!! },
+                    imageUrl = ""
                 )
             }
     }

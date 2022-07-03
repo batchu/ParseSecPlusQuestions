@@ -19,7 +19,9 @@ data class Question(
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
     val choices: List<Choice>,
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
-    val explanation: String?
+    val explanation: String?,
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
+    val imageUrl: String?
 )
 @DynamoDBDocument
 data class Choice(
