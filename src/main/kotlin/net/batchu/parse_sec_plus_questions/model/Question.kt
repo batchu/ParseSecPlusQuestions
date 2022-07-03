@@ -14,7 +14,7 @@ interface QuestionRepository: CrudRepository<Question, Float>
 @DynamoDBTable(tableName = "secplus")
 data class Question(
     @DynamoDBHashKey
-    val id:Float,
+    val id:String,
     @DynamoDBAttribute
     val question: String,
     @DynamoDBAttribute

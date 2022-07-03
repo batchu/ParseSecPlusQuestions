@@ -17,6 +17,7 @@ class ParseDocx: CommandLineRunner{
     @Autowired
     private lateinit var repo: QuestionRepository
     var LOG: Logger = LoggerFactory.getLogger(ParseDocx::class.java)
+
     private fun readDoc(){
         val dir = File("./src/main/resources/files/")
 
@@ -41,16 +42,19 @@ class ParseDocx: CommandLineRunner{
             .let { list ->
                 var no = ""
                 list.mapIndexed { index, it ->
+                    LOG.debug("Processing index ${index}")
                     val inQuestion = (index > 0 && list[index - 1].startsWith("QUESTION "))
                     when {
                         it.startsWith("QUESTION ") -> Triple(it.substringAfter("QUESTION ").trim().apply { no = this }, "id", null)
                         inQuestion                 -> Triple(no, "Question" , it.trim())
-                        it.startsWith("A. ")       -> Triple(no, "Answer A" , it.substringAfter(". ").trim())
-                        it.startsWith("B. ")       -> Triple(no, "Answer B" , it.substringAfter(". ").trim())
-                        it.startsWith("C. ")       -> Triple(no, "Answer C" , it.substringAfter(". ").trim())
-                        it.startsWith("D. ")       -> Triple(no, "Answer D" , it.substringAfter(". ").trim())
-                        it.startsWith("E. ")       -> Triple(no, "Answer E" , it.substringAfter(". ").trim())
-                        it.startsWith("Answer: ")  -> Triple(no, "Answer" , it.substringAfter(": ").trim())
+                        it.trimStart().startsWith("A. ")       -> Triple(no, "Answer A" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("B. ")       -> Triple(no, "Answer B" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("C. ")       -> Triple(no, "Answer C" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("D. ")       -> Triple(no, "Answer D" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("E. ")       -> Triple(no, "Answer E" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("F. ")       -> Triple(no, "Answer F" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("G. ")       -> Triple(no, "Answer G" , it.substringAfter(". ").trim())
+                        it.trimStart().startsWith("Answer: ") ||  it.contains("Answer:")  -> Triple(no, "Answer" , it.substringAfter(": ").trim())
                         else                       -> Triple(no, "Comment" , it)
                     }
                 }
@@ -58,9 +62,9 @@ class ParseDocx: CommandLineRunner{
             .groupBy { (id, _, _) -> id }
             .map { (id, list) ->
                 val correctAnswer = list.first { it.second == "Answer" }.third!![0]
+                LOG.debug("Creating question instance ${id}")
                 Question(
-                    id = id
-                        .toFloat(),
+                    id = id,
                     question = list
                         .first { it.second == "Question" }.third!!,
                     choices = list
