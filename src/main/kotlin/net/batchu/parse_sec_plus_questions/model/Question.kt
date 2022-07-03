@@ -1,8 +1,6 @@
 package net.batchu.parse_sec_plus_questions.model
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
+import com.amazonaws.services.dynamodbv2.datamodeling.*
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan
 import org.springframework.context.annotation.Primary
 import org.springframework.data.repository.CrudRepository
@@ -14,16 +12,19 @@ interface QuestionRepository: CrudRepository<Question, Float>
 @DynamoDBTable(tableName = "secplus")
 data class Question(
     @DynamoDBHashKey
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     val id:String,
-    @DynamoDBAttribute
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     val question: String,
-    @DynamoDBAttribute
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
     val choices: List<Choice>,
-    @DynamoDBAttribute
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     val explanation: String?
 )
-
+@DynamoDBDocument
 data class Choice(
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     val choice:String,
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.B)
     val isCorrect: Boolean
 )

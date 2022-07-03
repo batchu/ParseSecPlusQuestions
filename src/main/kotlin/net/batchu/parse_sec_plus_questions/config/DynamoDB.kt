@@ -24,7 +24,7 @@ class DynamoDBConfig {
 	@Bean
 	fun amazonDynamoDB(): AmazonDynamoDB {
 		return AmazonDynamoDBClientBuilder.standard().withCredentials(amazonAWSCredentialsProvider())
-			.withRegion(Regions.US_EAST_1).build();
+			.withRegion(Regions.US_EAST_2).build();
 	}
 
 	fun amazonAWSCredentialsProvider(): AWSCredentialsProvider? {
